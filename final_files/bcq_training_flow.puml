@@ -1,0 +1,45 @@
+@startuml
+!theme plain
+skinparam backgroundColor White
+skinparam defaultFontName Times New Roman
+skinparam defaultFontSize 11
+
+title Training Flow — DiscreteBCQ
+
+actor "Dataset" as DATA
+participant "Preprocessing\n(compute_rewards)" as PRE
+participant "MDPDataset" as MDP
+participant "DiscreteBCQ Agent" as AGENT
+participant "Q-Network" as Q
+participant "Behavior Clone\nNetwork" as BC
+participant "Action Selection\nHead" as SELECT
+participant "Evaluation\n(Per-Action Mean)" as EVAL
+
+== Data Preparation ==
+DATA -> PRE : raw campaign logs
+PRE -> PRE : compute reward_enhanced\nnormalize to [-1, 1]\nsplit 80/20 by episode
+PRE -> MDP : observations, actions,\nrewards, terminals
+
+== Initialization ==
+AGENT -> AGENT : load BCQ_PARAMS\n(γ, lr, af, β, batch_size)
+AGENT -> MDP : build_with_dataset()
+note right: infer action/observation\nspace from data
+
+== Training Loop (50,000 steps) ==
+loop each gradient step
+    MDP -> AGENT : sample batch (256 transitions)
+    AGENT -> Q : forward pass → Q(s, a)
+    AGENT -> BC : forward pass → π_β(a|s)
+    Q -> AGENT : Q(s, a) for all actions
+    BC -> AGENT : log π_β(a|s) for all actions
+    AGENT -> SELECT : compute loss\nL = L_Q + β · L_BC\n+ regularization
+    SELECT -> AGENT : gradient update
+    AGENT -> Q : backpropagation
+    AGENT -> BC : backpropagation
+end
+
+== Evaluation ==
+AGENT -> EVAL : predict(test_obs)
+EVAL -> EVAL : per_action_means[pred]\n→ test mean return
+
+@enduml

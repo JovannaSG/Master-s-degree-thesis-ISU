@@ -1,0 +1,51 @@
+@startuml
+!theme plain
+skinparam backgroundColor White
+skinparam defaultFontName Times New Roman
+skinparam defaultFontSize 11
+
+title Budget Factor Comparison — Experiment Flow
+
+start
+
+:Load dataset\n(augmented_dataset_merged.csv);
+
+:Compute per-action means\nfor full dataset;
+
+partition "For each budget factor\nB ∈ {0.3, 0.5, 0.7, 1.0}" {
+
+    :Apply budget constraint\nmake_budgeted_data(B);
+    note right
+        budget = episode_cost × B
+        budget_remaining = (budget - cumulative) / budget
+        clip to [0, 1], append as 9th feature
+        discard samples where budget_remaining ≤ 0
+    end note
+
+    :Split 80/20 by episode\nrandom_state=42;
+
+    :Standardize features\n(StandardScaler);
+
+    fork
+        :Train DQN\n(50k steps);
+    fork again
+        :Train CQL\n(50k steps, α=0.2);
+    fork again
+        :Train BCQ\n(50k steps, af=0.3, β=0.5);
+    fork again
+        :Train PPO\n(100k SB3 timesteps);
+    end fork
+
+    :Evaluate all policies\nper_action_means[pred].mean();
+
+    :Save results\n(results.json);
+
+}
+
+:Aggregate results\n(budget_comparison.json);
+
+:Generate comparison plot\n(budget_comparison.png);
+
+stop
+
+@enduml

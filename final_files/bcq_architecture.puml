@@ -1,0 +1,41 @@
+@startuml
+!theme plain
+skinparam backgroundColor White
+skinparam defaultFontName Times New Roman
+skinparam defaultFontSize 11
+
+title DiscreteBCQ Architecture
+
+rectangle "State (9 features)\nCPC, CTR, CPC_change,\nConversions, Position,\nDay, DeviceType,\nIsWeekend, BudgetRemaining" as STATE #D6E8F7
+
+package "Q-Network" as Q_PKG #C6EFCE {
+    rectangle "Hidden Layer 1\n128 units, ReLU" as Q_H1
+    rectangle "Hidden Layer 2\n128 units, ReLU" as Q_H2
+    rectangle "Q-Values\nQ(s,a₀) ... Q(s,a₄)" as Q_OUT #FFEB9C
+}
+
+package "Behavioral Clone" as B_PKG #E2D1F2 {
+    rectangle "Hidden Layer 1\n128 units, ReLU" as B_H1
+    rectangle "Hidden Layer 2\n128 units, ReLU" as B_H2
+    rectangle "Behavior Policy\nπ_β(a₀|s) ... π_β(a₄|s)" as B_OUT #FFEB9C
+}
+
+rectangle "Action Selection\nπ(s) = argmaxₐ [Q(s,a) + β·log π_β(a|s)]" as SELECT #F8D7DA
+
+rectangle "Selected Action\n0: Decrease  1: Slight ↓\n2: Keep  3: Slight ↑  4: Increase" as OUTPUT #D6E8F7
+
+STATE --> Q_H1 : shared input
+STATE --> B_H1 : shared input
+
+Q_H1 --> Q_H2
+Q_H2 --> Q_OUT
+
+B_H1 --> B_H2
+B_H2 --> B_OUT
+
+Q_OUT --> SELECT
+B_OUT --> SELECT
+
+SELECT --> OUTPUT
+
+@enduml

@@ -1,0 +1,113 @@
+{
+  "results": [
+    {
+      "alpha": 0.1,
+      "mean_return": 0.08719592541456223,
+      "std_return": 0.6890333294868469,
+      "min_return": -2.6190619468688965,
+      "max_return": 1.2359613180160522,
+      "episodes": 362,
+      "policy_agreement": 0.19338422391857507,
+      "collapse_ratio": 1.0,
+      "action_distribution": {
+        "0": 0.0,
+        "1": 393.0,
+        "2": 0.0,
+        "3": 0.0,
+        "4": 0.0
+      },
+      "dominant_action": 1
+    },
+    {
+      "alpha": 0.5,
+      "mean_return": 0.08719592541456223,
+      "std_return": 0.6890333294868469,
+      "min_return": -2.6190619468688965,
+      "max_return": 1.2359613180160522,
+      "episodes": 362,
+      "policy_agreement": 0.19338422391857507,
+      "collapse_ratio": 1.0,
+      "action_distribution": {
+        "0": 0.0,
+        "1": 393.0,
+        "2": 0.0,
+        "3": 0.0,
+        "4": 0.0
+      },
+      "dominant_action": 1
+    },
+    {
+      "alpha": 1.0,
+      "mean_return": 0.08719592541456223,
+      "std_return": 0.6890333294868469,
+      "min_return": -2.6190619468688965,
+      "max_return": 1.2359613180160522,
+      "episodes": 362,
+      "policy_agreement": 0.19338422391857507,
+      "collapse_ratio": 1.0,
+      "action_distribution": {
+        "0": 0.0,
+        "1": 393.0,
+        "2": 0.0,
+        "3": 0.0,
+        "4": 0.0
+      },
+      "dominant_action": 1
+    },
+    {
+      "alpha": 2.0,
+      "mean_return": 0.08719592541456223,
+      "std_return": 0.6890333294868469,
+      "min_return": -2.6190619468688965,
+      "max_return": 1.2359613180160522,
+      "episodes": 362,
+      "policy_agreement": 0.19338422391857507,
+      "collapse_ratio": 1.0,
+      "action_distribution": {
+        "0": 0.0,
+        "1": 393.0,
+        "2": 0.0,
+        "3": 0.0,
+        "4": 0.0
+      },
+      "dominant_action": 1
+    },
+    {
+      "alpha": 5.0,
+      "mean_return": 0.08719592541456223,
+      "std_return": 0.6890333294868469,
+      "min_return": -2.6190619468688965,
+      "max_return": 1.2359613180160522,
+      "episodes": 362,
+      "policy_agreement": 0.19338422391857507,
+      "collapse_ratio": 1.0,
+      "action_distribution": {
+        "0": 0.0,
+        "1": 0.0,
+        "2": 0.0,
+        "3": 0.0,
+        "4": 393.0
+      },
+      "dominant_action": 4
+    },
+    {
+      "alpha": 10.0,
+      "mean_return": 0.08719592541456223,
+      "std_return": 0.6890333294868469,
+      "min_return": -2.6190619468688965,
+      "max_return": 1.2359613180160522,
+      "episodes": 362,
+      "policy_agreement": 0.19338422391857507,
+      "collapse_ratio": 1.0,
+      "action_distribution": {
+        "0": 0.0,
+        "1": 393.0,
+        "2": 0.0,
+        "3": 0.0,
+        "4": 0.0
+      },
+      "dominant_action": 1
+    }
+  ],
+  "best_alpha": 0.1
+}

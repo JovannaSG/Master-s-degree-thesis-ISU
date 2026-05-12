@@ -1,0 +1,76 @@
+// DiscreteBCQ Architecture — Component/Flow Diagram
+// Render: dot -Tpng -Gdpi=300 bcq_architecture.dot -o bcq_architecture.png
+// Render: dot -Tsvg bcq_architecture.dot -o bcq_architecture.svg
+
+digraph DiscreteBCQ {
+    rankdir = TB;
+    splines = ortho;
+    nodesep = 0.7;
+    ranksep = 1.0;
+    bgcolor = "white";
+    fontname = "Times New Roman";
+    fontsize = 12;
+
+    // Node styles
+    node [shape = box, style = "rounded,filled", fontname = "Times New Roman", fontsize = 10];
+
+    // Input
+    state [label = "State\n(9 features)\nCPC, CTR, CPC_change,\nConversions, Position,\nDay, DeviceType,\nIsWeekend, BudgetRemaining",
+           fillcolor = "#D6E8F7", height = 1.5];
+
+    // Shared layers (for conceptual clarity — actually separate networks)
+    node [height = 0.7];
+
+    // Q-Network branch
+    q_h1 [label = "Hidden Layer 1\n128 units, ReLU", fillcolor = "#C6EFCE"];
+    q_h2 [label = "Hidden Layer 2\n128 units, ReLU", fillcolor = "#C6EFCE"];
+    q_out [label = "Q-Values\nQ(s, a₀) … Q(s, a₄)", fillcolor = "#FFEB9C"];
+
+    // Behavioral Clone branch
+    b_h1 [label = "Hidden Layer 1\n128 units, ReLU", fillcolor = "#E2D1F2"];
+    b_h2 [label = "Hidden Layer 2\n128 units, ReLU", fillcolor = "#E2D1F2"];
+    b_out [label = "Behavior Policy\nπ_β(a₀|s) … π_β(a₄|s)", fillcolor = "#FFEB9C"];
+
+    // Action selection
+    select [label = "Action Selection\nπ(s) = argmaxₐ [Q(s,a) + β·log π_β(a|s)]",
+            fillcolor = "#F8D7DA", height = 0.9, fontsize = 11,
+            fontname = "Times New Roman"];
+
+    // Output
+    output [label = "Selected Action\n0: Decrease    1: Slight ↓\n2: Keep    3: Slight ↑\n4: Increase",
+            fillcolor = "#D6E8F7", height = 1.0];
+
+    // Edges
+    state -> q_h1 [label = "shared\ninput", fontsize = 9];
+    state -> b_h1 [label = "shared\ninput", fontsize = 9];
+
+    q_h1 -> q_h2;
+    q_h2 -> q_out;
+
+    b_h1 -> b_h2;
+    b_h2 -> b_out;
+
+    q_out -> select;
+    b_out -> select;
+
+    select -> output [penwidth = 2];
+
+    // Subgraph labels
+    subgraph cluster_q {
+        label = "Q-Network (ε-greedy)";
+        fontname = "Times New Roman";
+        fontsize = 11;
+        style = dashed;
+        color = "#2E7D32";
+        q_h1; q_h2; q_out;
+    }
+
+    subgraph cluster_b {
+        label = "Behavioral Clone";
+        fontname = "Times New Roman";
+        fontsize = 11;
+        style = dashed;
+        color = "#7B1FA2";
+        b_h1; b_h2; b_out;
+    }
+}
